@@ -7,7 +7,7 @@
       </div>
       <div class="content">
         <div v-if="particularPoker" class="particularPoker">
-          <div class="poker-par" :style="{'background-image':'url(./logo.png)',color:'green'}" :class="`poker-par-${particularPokerStr}`"></div>
+          <div class="poker-par" :style="{backgroundImage: `url(${imgUrl})`}" :class="`poker-par-${particularPokerStr}`"></div>
         </div>
         <div v-else class="poker-type-list" :class="`item-count-${normalNumber}`">
           <div class="poker-type" :class="`poker-item-${item}`" v-for="item of normalNumber" :key="item">{{pokerType}}</div>
@@ -31,6 +31,9 @@ export default class Poker extends Vue {
 
   @Prop({ type: Boolean })
   private done!: boolean
+
+  // img url 需要使用变量引用地址，然后再模板使用该地址
+  private imgUrl = require("@/assets/logo.png")
 
   private get pokerNumber() {
     if (!this.pokerStr) return ""
