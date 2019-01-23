@@ -17,7 +17,8 @@
         </div>
         <poker class="poker" :class="{done:done}" :done="done" v-show="value" :pokerStr="value"></poker>
         <div class="operate">
-          <button @click="startClick" v-show="done" class="start red-button">开始</button>
+          <button @click="startClick" v-if="done" class="start red-button">开始</button>
+          <button @click="stop" ref="stop" v-else class="start red-button">停止</button>
         </div>
       </div>
     </div>
@@ -71,34 +72,19 @@ export default class App extends Vue {
     this.done = false
     this.createNewPoker()
 
-    const startHandle = setInterval(this.createNewPoker, 50);
+    this.handlerNumber = setInterval(this.createNewPoker, 50);
 
-    this.handlerNumber = setTimeout(() => {
-      clearInterval(startHandle)
-      this.stop()
-    }, 5000);
   }
 
   private stop() {
-
-    // 停止之前的interval
-    window.clearInterval(this.handlerNumber)
-
-    let handler = -1;
-    const getNext = (timmer: number) => {
-      clearTimeout(handler)
-      if (timmer < MaxStopTimmer) {
-        this.createNewPoker()
-        handler = setTimeout(() => {
-          getNext(timmer += 300)
-        }, timmer);
-      } else {
-        this.done = true
-      }
-    }
-    getNext(100)
+    clearInterval(this.handlerNumber)
+    this.done = true
   }
   private createNewPoker() {
+    const stopEl = this.$refs.stop as HTMLElement
+    if (stopEl) {
+      stopEl.focus()
+    }
     this.value = this.pokerList[this.getRandom()]
   }
 
@@ -177,6 +163,9 @@ export default class App extends Vue {
         border-radius: 45px;
         &:hover {
           animation: start 1.5s linear infinite;
+        }
+        &:focus {
+          outline: none;
         }
 
         @keyframes start {
