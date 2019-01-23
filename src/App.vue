@@ -199,20 +199,41 @@ export default class App extends Vue {
       margin-top: 100px;
       @rotate: 360deg;
       &.done {
-        animation: done 3s ease-out;
+        animation: done 5s ease-out;
       }
       @keyframes done {
         0% {
-          transform: rotate(@rotate);
+          transform: rotate3d(1, 0, 0, 0deg);
         }
-        25% {
-          transform: rotate(@rotate*2);
+        10% {
+          transform: rotate3d(1, 1, 0, 180deg);
+        }
+        20% {
+          transform: rotate3d(1, 1, 1, 45deg);
+        }
+        30% {
+          transform: rotateX(180deg);
+        }
+        40% {
+          transform: rotate3d(0, 1, 0, 90deg);
         }
         50% {
-          transform: rotate(@rotate*3);
+          transform: rotate3d(0, 0, -2, 140deg);
+        }
+        60% {
+          transform: rotateY(180deg);
+        }
+        70% {
+          transform: rotate3d(0.8, 1, 0, 180deg);
+        }
+        80% {
+          transform: rotate3d(0.6, 0.3, 0, 270deg);
+        }
+        90% {
+          transform: rotate3d(0.2, -0.6, 0.5, 180deg);
         }
         100% {
-          transform: rotate(@rotate*4);
+          transform: rotate3d(1, 0, 1, 360deg);
         }
       }
       .title {
@@ -220,6 +241,7 @@ export default class App extends Vue {
       }
     }
     .history-title {
+      height: 40px;
       font-size: 16px;
     }
   }

@@ -7,7 +7,7 @@
       </div>
       <div class="content">
         <div v-if="particularPoker" class="particularPoker">
-          <div></div>
+          <div class="poker-par" :class="`poker-par-${particularPokerStr}`"></div>
         </div>
         <div v-else class="poker-type-list" :class="`item-count-${normalNumber}`">
           <div class="poker-type" :class="`poker-item-${item}`" v-for="item of normalNumber" :key="item">{{pokerType}}</div>
@@ -40,6 +40,10 @@ export default class Poker extends Vue {
   private get normalNumber() {
     if (!this.pokerStr || this.particularPoker) return 0
     return Number.parseInt(this.pokerStr.substring(1), undefined)
+  }
+
+  private get particularPokerStr() {
+    return this.pokerStr[1]
   }
 
   private get particularPoker() {
@@ -95,6 +99,21 @@ export default class Poker extends Vue {
     display: flex;
     justify-content: center;
     align-items: center;
+    .poker-par {
+      height: 45px;
+      width: 140px;
+      background-image: url(/logo.png);
+      background-repeat: round;
+    }
+    .poker-par-J {
+      background-color: #c67e00;
+    }
+    .poker-par-Q {
+      background-color: #d5d5d5;
+    }
+    .poker-par-K {
+      background-color: gold;
+    }
   }
 
   .poker-type-list {
