@@ -6,11 +6,11 @@
         <div class="both-end-poker-type">{{pokerType}}</div>
       </div>
       <div class="content">
-        <div v-if="particularPoker">
-          {{pokerNumber}}
+        <div v-if="particularPoker" class="particularPoker">
+          <div></div>
         </div>
-        <div v-else class="poker-type-list">
-          <span class="poker-type" v-for="item of normalNumber" :key="item">{{pokerType}}</span>
+        <div v-else class="poker-type-list" :class="`item-count-${normalNumber}`">
+          <div class="poker-type" :class="`poker-item-${item}`" v-for="item of normalNumber" :key="item">{{pokerType}}</div>
         </div>
       </div>
       <div class="right">
@@ -34,12 +34,12 @@ export default class Poker extends Vue {
 
   private get pokerNumber() {
     if (!this.pokerStr) return ""
-    return this.pokerStr[1]
+    return this.pokerStr.substring(1)
   }
 
   private get normalNumber() {
     if (!this.pokerStr || this.particularPoker) return 0
-    return Number.parseInt(this.pokerStr[1], undefined)
+    return Number.parseInt(this.pokerStr.substring(1), undefined)
   }
 
   private get particularPoker() {
@@ -86,19 +86,120 @@ export default class Poker extends Vue {
     }
     .content {
       flex: 1;
-      padding: 10px 5px;
+      padding: 30px 5px;
     }
   }
-  .poker-type-list {
+
+  .particularPoker {
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  .poker-type-list {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     flex-wrap: wrap;
-    align-content: stretch;
     .poker-type {
       font-size: 40px;
-      width: 60px;
-      height: 60px;
+      width: 50px;
+      display: table;
+    }
+  }
+  .item-count-1 {
+    justify-content: center;
+    .poker-item-1 {
+      font-size: 100px;
+    }
+  }
+  .item-count-2,
+  .item-count-3 {
+    .poker-item-1 {
+      transform: rotate(180deg);
+    }
+    flex-direction: column;
+    justify-content: space-around;
+  }
+
+  .item-count-4,
+  .item-count-6 {
+    .poker-item-1,
+    .poker-item-2 {
+      transform: rotate(180deg);
+    }
+  }
+  .item-count-5 {
+    justify-content: center;
+    .poker-item-1,
+    .poker-item-2 {
+      transform: rotate(180deg);
+    }
+    .poker-item-3 {
+      width: 100%;
+    }
+  }
+
+  .item-count-7 {
+    flex-direction: column;
+    .poker-type {
+      flex-basis: 33.333%;
+    }
+    .poker-item-4 {
+      flex-basis: 100%;
+      padding-bottom: 25%;
+    }
+    .poker-item-1,
+    .poker-item-4,
+    .poker-item-5 {
+      transform: rotate(180deg);
+    }
+  }
+  .item-count-8 {
+    flex-direction: column;
+    .poker-type {
+      flex-basis: 33.333%;
+    }
+    .poker-item-4,
+    .poker-item-5 {
+      flex-basis: 50%;
+      padding-bottom: 25%;
+    }
+    .poker-item-1,
+    .poker-item-4,
+    .poker-item-6 {
+      transform: rotate(180deg);
+    }
+  }
+  .item-count-9 {
+    flex-direction: column;
+    .poker-type {
+      flex-basis: 33.333%;
+    }
+    .poker-item-1,
+    .poker-item-4,
+    .poker-item-7 {
+      transform: rotate(180deg);
+    }
+  }
+  .item-count-10 {
+    flex-direction: column;
+    .poker-type {
+      flex-basis: 25%;
+    }
+    .poker-item-5,
+    .poker-item-6 {
+      flex-basis: 50%;
+      padding-bottom: 25%;
+    }
+    .poker-item-1,
+    .poker-item-2,
+    .poker-item-5,
+    .poker-item-7,
+    .poker-item-8 {
+      transform: rotate(180deg);
     }
   }
 }

@@ -3,7 +3,7 @@
     <div class="top">指旺金科西安中心 2019 年年会抽奖活动</div>
     <div class="container">
       <div class="left">
-        <button class="flip" @click="flipClick">打乱顺序</button>
+        <button class="flip red-button" @click="flipClick">打乱顺序</button>
         <transition-group name="flip" tag="ul" class="poker-list">
           <li class="poker-list-item" v-for="(item,index) of pokerList" :key="item" :class="{red: ['♥','♦'].includes(item[0])}">
             <span>{{item}}</span> <a @click="remove(index)" class="remove">X</a>
@@ -12,12 +12,13 @@
         <div>共计：{{pokerList.length}}</div>
       </div>
       <div class="content">
-        <div class="operate">
-          <button @click="startClick" v-if="done" class="start">开始</button>
+        <div class="history-title" v-if="valueHistory.length">
+          <text-keep-moving :msgList="valueHistory"></text-keep-moving>
         </div>
         <poker class="poker" :class="{done:done}" :done="done" v-show="value" :pokerStr="value"></poker>
-
-        <div v-if="valueHistory.length">中将历史:{{valueHistory}}</div>
+        <div class="operate">
+          <button @click="startClick" v-show="done" class="start red-button">开始</button>
+        </div>
       </div>
     </div>
 
@@ -27,6 +28,7 @@
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
 import Poker from "./components/poker.vue";
+import TextKeepMoving from "./components/text-keep-moving.vue";
 
 const SOURCE = [
   "♠1", "♠2", "♠3", "♠4", "♠5", "♠6", "♠7", "♠8", "♠9", "♠10", "♠J", "♠Q", "♠K",
@@ -38,7 +40,8 @@ const MaxStopTimmer = 2000;
 
 @Component({
   components: {
-    Poker
+    Poker,
+    TextKeepMoving
   }
 })
 export default class App extends Vue {
@@ -54,6 +57,8 @@ export default class App extends Vue {
   private onDoneChange() {
     if (!this.done) return
     this.valueHistory.push(this.value)
+    const index = this.pokerList.indexOf(this.value)
+    this.pokerList.splice(index, 1)
   }
 
   private mounted() {
@@ -62,6 +67,7 @@ export default class App extends Vue {
 
   private startClick() {
     clearTimeout(this.handlerNumber)
+    this.valueHistory.splice(0, 1)
     this.done = false
     this.createNewPoker()
 
@@ -119,14 +125,34 @@ export default class App extends Vue {
 .page {
   height: 100%;
   width: 100%;
-  border: solid 4px #f2f2f2;
   display: flex;
   flex-direction: column;
   .top {
-    flex-basis: 60px;
+    flex-basis: 90px;
     text-align: center;
-    font-size: 40px;
-    background-color: aquamarine;
+    font-size: 60px;
+
+    background-image: -webkit-linear-gradient(
+      right,
+      #b60000,
+      #27ff00 25%,
+      #ff00f7 50%,
+      #0066ff 75%,
+      #b60000
+    );
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    -webkit-background-size: 200% 100%;
+    -webkit-animation: masked-animation 4s linear infinite;
+
+    @keyframes masked-animation {
+      0% {
+        background-position: 0 0;
+      }
+      100% {
+        background-position: -100% 0;
+      }
+    }
   }
   .container {
     flex: 1;
@@ -140,42 +166,37 @@ export default class App extends Vue {
   }
 
   .content {
+    position: static;
     .operate {
-      text-align: right;
-      margin-right: 50px;
-      > button {
-        &:hover {
-          cursor: pointer;
-        }
-      }
+      position: absolute;
+      right: 50px;
+      bottom: 50px;
       .start {
         width: 90px;
         height: 90px;
-        background-color: yellowgreen;
         border-radius: 45px;
-        color: white;
-        border: 0;
         &:hover {
-          animation: start 2s linear infinite;
+          animation: start 1.5s linear infinite;
         }
 
         @keyframes start {
           0% {
             font-size: 14px;
-            background-color: green;
+            border-radius: 45px;
           }
           50% {
             font-size: 24px;
-            background-color: red;
+            border-radius: 30px;
           }
           100% {
             font-size: 14px;
-            background-color: green;
+            border-radius: 45px;
           }
         }
       }
     }
     .poker {
+      margin-top: 100px;
       @rotate: 360deg;
       &.done {
         animation: done 3s ease-out;
@@ -198,6 +219,9 @@ export default class App extends Vue {
         font-size: 30px;
       }
     }
+    .history-title {
+      font-size: 16px;
+    }
   }
 
   .left {
@@ -214,11 +238,13 @@ export default class App extends Vue {
       }
       &-item {
         line-height: 26px;
-        background-color: #f2f2f2;
+        background-color: #fdfdfd;
+        padding-left: 20px;
         display: flex;
         justify-content: space-between;
         align-items: center;
         &:hover {
+          background-color: #f2f2f2;
           .remove {
             display: unset;
           }
@@ -228,7 +254,7 @@ export default class App extends Vue {
           width: 16px;
           height: 16px;
           border-radius: 8px;
-          background-color: red;
+          background-color: #b60000;
           margin-right: 5px;
           font-size: 13px;
           line-height: 16px;
@@ -238,12 +264,8 @@ export default class App extends Vue {
       }
     }
     .flip {
-      border-color: #409eff;
-      height: 30px;
-      width: 90px;
-      background-color: #409eff;
-      border-radius: 5px;
-      border: 0;
+      height: 40px;
+      width: 100px;
     }
   }
 
@@ -271,6 +293,16 @@ export default class App extends Vue {
   a {
     &:hover {
       cursor: pointer;
+    }
+  }
+  .red-button {
+    border-color: #ffffff;
+    background-color: #b60000;
+    border: 0;
+    color: white;
+    font-size: 16px;
+    &:focus {
+      outline-color: #b60000;
     }
   }
 }
