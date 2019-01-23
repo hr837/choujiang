@@ -7,7 +7,7 @@
       </div>
       <div class="content">
         <div v-if="particularPoker" class="particularPoker">
-          <div class="poker-par" :class="`poker-par-${particularPokerStr}`"></div>
+          <div class="poker-par" :style="{'background-image':'url(./logo.png)',color:'green'}" :class="`poker-par-${particularPokerStr}`"></div>
         </div>
         <div v-else class="poker-type-list" :class="`item-count-${normalNumber}`">
           <div class="poker-type" :class="`poker-item-${item}`" v-for="item of normalNumber" :key="item">{{pokerType}}</div>
@@ -102,7 +102,7 @@ export default class Poker extends Vue {
     .poker-par {
       height: 45px;
       width: 140px;
-      background-image: url(/logo.png);
+      // background-image: url(logo.png);
       background-repeat: round;
     }
     .poker-par-J {

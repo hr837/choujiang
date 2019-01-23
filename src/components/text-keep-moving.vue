@@ -13,7 +13,7 @@ import { Component, Vue, Watch, Prop } from "vue-property-decorator";
 export default class TextKeepMoving extends Vue {
 
   @Prop({ default: () => [] })
-  private msgList: string[];
+  private msgList!: string[];
 
   private hasMsg = false;
   private message = "";
