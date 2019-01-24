@@ -64,6 +64,16 @@ export default class App extends Vue {
 
   private mounted() {
     this.pokerList = [...SOURCE]
+
+    document.onkeyup = (e) => {
+      if (e.keyCode === 13) {
+        if (this.done) {
+          this.startClick()
+        } else {
+          this.stop()
+        }
+      }
+    }
   }
 
   private startClick() {
@@ -81,10 +91,6 @@ export default class App extends Vue {
     this.done = true
   }
   private createNewPoker() {
-    const stopEl = this.$refs.stop as HTMLElement
-    if (stopEl) {
-      stopEl.focus()
-    }
     this.value = this.pokerList[this.getRandom()]
   }
 
